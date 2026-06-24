@@ -46,6 +46,9 @@ main{max-width:1180px;margin:0 auto;padding:18px 20px 50px;display:grid;grid-tem
 .tag{display:inline-block;padding:2px 9px;border-radius:99px;background:#eef2f8;color:#445569;font-weight:600}
 .tag.new{background:#fff4e5;color:#924d10}
 .tag.orig{background:#e7f0fb;color:#1a4fa0}
+.video-link{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:99px;background:#eef8f6;color:#0f766e;text-decoration:none;font-weight:700}
+.video-link:hover{background:#d9f1ec}
+.ppt-loc{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:99px;background:#f4eefb;color:#6b21a8;font-weight:700}
 .qtxt{font-size:15.5px;font-weight:700;margin-bottom:13px;line-height:1.55}
 .opts{display:flex;flex-direction:column;gap:8px}
 label.opt{display:grid;grid-template-columns:26px 1fr;gap:8px;align-items:start;padding:9px 11px;border:1.5px solid #e0e7f0;border-radius:8px;cursor:pointer;background:#fbfcfe;font-size:14px;line-height:1.5}
@@ -105,6 +108,8 @@ code{font-family:"Courier New",monospace;background:#e8edf5;padding:1px 5px;bord
   .qblock{padding:12px;border-radius:8px;margin:0;border:1px solid var(--line)}
   .qmeta{font-size:10px;gap:3px;margin-bottom:6px}
   .tag{padding:1px 6px;font-size:9px;border-radius:4px}
+  .video-link{padding:1px 6px;font-size:9px;border-radius:4px}
+  .ppt-loc{padding:1px 6px;font-size:9px;border-radius:4px}
   .qtxt{font-size:14px;line-height:1.5;margin-bottom:10px;font-weight:700;overflow-wrap:anywhere}
   label.opt{font-size:13px;padding:10px 10px;min-height:44px;grid-template-columns:20px 1fr;gap:7px;line-height:1.4;border-radius:7px}
   input[type=radio]{width:17px;height:17px;margin-top:2px;flex-shrink:0}
@@ -169,6 +174,24 @@ const QB = [{"ch": "L1", "label": "第1章 · 数据库基础概念", "src": "�
 const LABELS = {"L1": "第1章 · 数据库基础概念", "L2": "第2章 · 体系结构与分类", "L3": "第3章 · EER 与 UML 建模", "L4": "第4章 · 数据组织与关系模型", "L5": "第5章 · EER 到关系映射", "L6": "第6章 · SQL 基础", "L7": "第7章 · SQL 进阶", "L8DW": "第17章 · 数据仓库与 BI", "L8API": "第15章 · 数据库 API 与访问", "L9": "第18-20章 · 集成/OLAP/大数据", "L10": "第14章 · 事务管理与并发"};
 const ORDER = ["L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8DW", "L8API", "L9", "L10"];
 const SCOPE_LABELS = Object.assign({"ALL":"全部题库 · 220题"}, LABELS);
+const VIDEO_BY_CH = {
+  L1: {id:"o36Z_OqC2ac", title:"Chapter 1 Fundamental Concepts of Database Management"},
+  L2: {id:"90Sj6tCfjGY", title:"Chapter 2 Architecture and Classification of DBMS"},
+  L3: {id:"oOCEAjlBTZw", title:"Chapter 3 Conceptual Data Modeling using EER and UML"},
+  L4: {id:"AaKXGVgjCI4", title:"Chapter 4 Organizational Aspects of Data Management"},
+  L5: {id:"nl32uJzE1Nk", title:"Chapter 6 Relational Databases"},
+  L6: {id:"uRdIdd-UkTc", title:"Chapter 7 SQL"},
+  L7: {id:"uRdIdd-UkTc", title:"Chapter 7 SQL"},
+  L8DW: {id:"w-S0fj0fmqg", title:"Chapter 17 Data warehousing and Business Intelligence"},
+  L8API: {id:"saNCRNO0VfY", title:"Chapter 15 Database APIs"},
+  L9: {id:"AScF4Te1BvM", title:"Chapter 18 Data Integration, Data Quality and Data Governance"},
+  L10: {id:"cwm9OxiOCZE", title:"Chapter 14 Basics of Transaction Management"}
+};
+const EXTRA_VIDEO_BY_CH = {
+  L6: {id:"b84kll5BBw8", title:"Using the practice environment"},
+  L7: {id:"b84kll5BBw8", title:"Using the practice environment"},
+  L9: {id:"jvsSXX2KgKM", title:"Chapter 19 Big Data"}
+};
 const SKEY = "dbm_fulldeck_v1";
 
 let store = loadStore();
@@ -190,6 +213,95 @@ function saveStore(){
 }
 
 function fmt(t){ return (t||"").replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>'); }
+function ytLink(video){ return "https://www.youtube.com/watch?v="+video.id; }
+function videoBadge(q){
+  const v=VIDEO_BY_CH[q.ch];
+  if(!v) return "";
+  const extra=EXTRA_VIDEO_BY_CH[q.ch];
+  const main='<a class="video-link" href="'+ytLink(v)+'" target="_blank" rel="noopener" title="'+v.title+'">▶ 章节视频</a>';
+  const more=extra?'<a class="video-link" href="'+ytLink(extra)+'" target="_blank" rel="noopener" title="'+extra.title+'">▶ 实操视频</a>':"";
+  return main+more;
+}
+function videoHint(q){
+  const v=VIDEO_BY_CH[q.ch];
+  if(!v) return "";
+  const extra=EXTRA_VIDEO_BY_CH[q.ch];
+  let text='<div style="margin-top:8px;color:var(--muted)">🎬 对应视频：<a href="'+ytLink(v)+'" target="_blank" rel="noopener">'+v.title+'</a>';
+  if(extra) text+=' · 实操：<a href="'+ytLink(extra)+'" target="_blank" rel="noopener">'+extra.title+'</a>';
+  return text+'</div>';
+}
+function questionText(q){ return (q.q+" "+q.opts.join(" ")+" "+q.exp).toLowerCase(); }
+function pptLocation(q){
+  const t=questionText(q);
+  const has=(words)=>words.some(w=>t.includes(w));
+  if(q.ch==="L1"){
+    if(has(["file approach","file-based","duplicate","inconsistent"])) return "PPT定位：File approach vs database approach";
+    if(has(["schema","state","catalog","metadata","database model"])) return "PPT定位：Schema / state / catalog / metadata";
+    if(has(["three-layer","external layer","internal layer","logical data independence","physical data independence","view"])) return "PPT定位：Three-layer architecture & data independence";
+    if(has(["acid","atomicity","durability","isolation","consistency"])) return "PPT定位：ACID properties";
+    if(has(["kpi","response time","throughput","space utilization"])) return "PPT定位：DBMS performance KPIs";
+    return "PPT定位：Chapter 1 fundamental concepts";
+  }
+  if(q.ch==="L2"){
+    if(has(["query processor","query parser","query optimizer","dml compiler"])) return "PPT定位：DBMS architecture - Query Processor";
+    if(has(["storage manager","transaction manager","buffer manager","recovery manager","lock manager"])) return "PPT定位：DBMS architecture - Storage Manager";
+    if(has(["ddl compiler","ddl"])) return "PPT定位：DDL compiler & catalog";
+    if(has(["record-at-a-time","set-at-a-time","procedural","declarative"])) return "PPT定位：DML classification";
+    if(has(["impedance mismatch","middleware","mongodb","java"])) return "PPT定位：DBMS interfaces & impedance mismatch";
+    return "PPT定位：Architecture and classification of DBMS";
+  }
+  if(q.ch==="L3"){
+    if(has(["entity","relationship","attribute","identifier","cardinality"])) return "PPT定位：ER modeling basics";
+    if(has(["weak","existence dependent","generalization","specialization","eer"])) return "PPT定位：Enhanced ER concepts";
+    if(has(["uml","class diagram","aggregation","composition","qualified"])) return "PPT定位：UML class diagram";
+    if(has(["ocl","constraint","invariant","precondition","postcondition"])) return "PPT定位：OCL constraints";
+    return "PPT定位：Conceptual data modeling with EER/UML";
+  }
+  if(q.ch==="L4" || q.ch==="L5"){
+    if(has(["foreign key","primary key","not null","null","cardinalit"])) return "PPT定位：Mapping ER/EER to relational model";
+    if(has(["normalization","normal form","functional dependency","2nf","3nf","bcnf","4nf"])) return "PPT定位：Normalization";
+    if(has(["relation","tuple","attribute","domain","key"])) return "PPT定位：Relational model basics";
+    return "PPT定位：Relational model and organization";
+  }
+  if(q.ch==="L6" || q.ch==="L7"){
+    if(has(["create table","foreign key","on delete","on update","constraint"])) return "PPT定位：SQL DDL & referential integrity";
+    if(has(["select","where","join","group by","having","order by"])) return "PPT定位：SQL SELECT queries";
+    if(has(["exists","not exists","any","all","in","subquery","correlated"])) return "PPT定位：SQL subqueries / EXISTS / ANY / ALL";
+    if(has(["view","update view","insert","delete","trigger"])) return "PPT定位：SQL views and updates";
+    if(has(["rank()","dense_rank","row_number","window","over("])) return "PPT定位：SQL OLAP / window functions";
+    return "PPT定位：SQL";
+  }
+  if(q.ch==="L8DW"){
+    if(has(["star schema","snowflake","fact table","dimension","surrogate"])) return "PPT定位：Star schema / fact and dimension tables";
+    if(has(["etl","extract","transform","load","slowly changing"])) return "PPT定位：ETL and slowly changing dimensions";
+    if(has(["olap","slice","dice","roll-up","drill-down","cube"])) return "PPT定位：OLAP operations";
+    if(has(["data mart","warehouse","business intelligence"])) return "PPT定位：Data warehouse and BI concepts";
+    return "PPT定位：Data warehousing and BI";
+  }
+  if(q.ch==="L8API"){
+    if(has(["odbc","jdbc","ado.net","ole db","api"])) return "PPT定位：Database APIs";
+    if(has(["sql injection","binding","prepared statement"])) return "PPT定位：SQL injection and binding";
+    if(has(["orm","object relational mapping"])) return "PPT定位：ORM and database access";
+    return "PPT定位：Database access and APIs";
+  }
+  if(q.ch==="L9"){
+    if(has(["data quality","data governance","master data","mdm","entity resolution"])) return "PPT定位：Data quality / MDM / governance";
+    if(has(["data integration","schema integration","ods","operational data store"])) return "PPT定位：Data integration patterns";
+    if(has(["big data","hadoop","spark","hive","pig","hbase","nosql","cap","base"])) return "PPT定位：Big Data / Hadoop / NoSQL";
+    if(has(["rank()","dense_rank","row_number","window","rollup","cube","grouping sets"])) return "PPT定位：Analytics / SQL OLAP constructs";
+    return "PPT定位：Data integration, governance, Big Data and analytics";
+  }
+  if(q.ch==="L10"){
+    if(has(["transaction","commit","abort","rollback","acid"])) return "PPT定位：Transaction lifecycle and ACID";
+    if(has(["logfile","write ahead","wal","undo","redo","checkpoint","recovery"])) return "PPT定位：Logging and recovery";
+    if(has(["lock","shared","exclusive","2pl","two-phase","deadlock","mgl","is","ix"])) return "PPT定位：Locking protocols / 2PL / MGL";
+    if(has(["serializable","precedence graph","schedule","isolation level","phantom","dirty read"])) return "PPT定位：Schedules, serializability and isolation";
+    return "PPT定位：Basics of transaction management";
+  }
+  return "PPT定位："+(LABELS[q.ch]||q.label);
+}
+function pptBadge(q){ return '<span class="ppt-loc">'+pptLocation(q)+'</span>'; }
+function pptHint(q){ return '<div style="margin-top:8px;color:#6b21a8">📍 '+pptLocation(q)+'</div>'; }
 
 function visibleIdx(){
   if(state.mode==="quiz") return state.quizIds;
@@ -224,8 +336,8 @@ function render(){
     const letter=String.fromCharCode(65+oi);
     return '<label class="'+cls+'"><input type="radio" name="q'+id+'" '+ck+' '+dis+' onchange="choose('+id+','+oi+')"><span><b>'+letter+'.</b> '+fmt(o)+'</span></label>';
   }).join("");
-  const expHtml = done? '<div class="exp show"><div class="exp-head">解析 EXPLANATION</div>'+q.exp+'</div>' : '<div class="exp"></div>';
-  div.innerHTML='<div class="qmeta"><span class="tag">'+q.label+'</span>'+srcTag+'<span style="margin-left:auto">第 '+(n+1)+' / '+ids.length+' 题</span></div><div class="qtxt">'+fmt(q.q)+'</div><div class="opts">'+opts+'</div>'+expHtml;
+  const expHtml = done? '<div class="exp show"><div class="exp-head">解析 EXPLANATION</div>'+q.exp+pptHint(q)+videoHint(q)+'</div>' : '<div class="exp"></div>';
+  div.innerHTML='<div class="qmeta"><span class="tag">'+q.label+'</span>'+srcTag+pptBadge(q)+videoBadge(q)+'<span style="margin-left:auto">第 '+(n+1)+' / '+ids.length+' 题</span></div><div class="qtxt">'+fmt(q.q)+'</div><div class="opts">'+opts+'</div>'+expHtml;
   c.appendChild(div);
 
   // 导航：上一题 / 下一题（不自动跳转）
@@ -255,7 +367,7 @@ function choose(id,oi){
   });
   const blk=document.querySelector('.qblock[data-id="'+id+'"]');
   const e=blk.querySelector(".exp");
-  e.innerHTML='<div class="exp-head">解析 EXPLANATION</div>'+q.exp; e.classList.add("show");
+  e.innerHTML='<div class="exp-head">解析 EXPLANATION</div>'+q.exp+pptHint(q)+videoHint(q); e.classList.add("show");
   updateStats(); updateChapList(); updateProgress(); checkQuiz();
 }
 
@@ -340,7 +452,9 @@ function updateProgress(){
     sb.style.display="block";
     document.getElementById("secTitle").textContent=SCOPE_LABELS[state.chapter]||LABELS[state.chapter];
     const orig=ids.filter(i=>!QB[i].new).length;
-    document.getElementById("secHint").textContent="当前范围共 "+ids.length+" 题（原题 "+orig+" + 自编 "+(ids.length-orig)+"）· 已完成 "+done+" · 选完答案点「下一题」前进，进度自动保存（localStorage + cookie）";
+    const v=VIDEO_BY_CH[state.chapter];
+    const videoText=v?' · 本章视频：<a href="'+ytLink(v)+'" target="_blank" rel="noopener">'+v.title+'</a>':"";
+    document.getElementById("secHint").innerHTML="当前范围共 "+ids.length+" 题（原题 "+orig+" + 自编 "+(ids.length-orig)+"）· 已完成 "+done+" · 选完答案点「下一题」前进，进度自动保存（localStorage + cookie）"+videoText;
     document.getElementById("progText").textContent="当前范围进度 "+done+" / "+ids.length;
     document.getElementById("progPct").textContent=pct+"%";
   }
