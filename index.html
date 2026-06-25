@@ -174,12 +174,24 @@ code{font-family:"Courier New",monospace;background:#e8edf5;padding:1px 5px;bord
 <span class="sep">|</span>
 <button class="btn" id="btnResetChap">重置本章</button>
 <button class="btn" id="btnResetAll">清空全部进度</button>
-</div>
+
+<button class="btn" id="btnAPIKey" style="background:#f97316;border-color:#f97316;color:#fff">⚙️ API Key 设置</button></div>
 <div id="resultBox" class="result-box">
 <div class="result-score" id="resultScore"></div>
 <div class="result-label" id="resultLabel"></div>
 <button class="btn primary" style="margin-top:14px" onclick="newQuiz()">再来一套</button>
+<div id="apiKeyModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center">
+<div style="background:#fff;border-radius:12px;width:90%;max-width:450px;padding:20px;box-shadow:0 10px 40px rgba(0,0,0,0.2)">
+<h2 style="margin:0 0 12px 0;font-size:18px">🔑 OpenAI API Key 设置</h2>
+<p style="color:#666;font-size:13px;margin:0 0 12px 0">从 <a href="https://platform.openai.com/api-keys" target="_blank" style="color:#1a4fa0">OpenAI</a> 获取你的 API Key</p>
+<input id="apiKeyInput" type="password" placeholder="粘贴你的 API Key（sk-proj-...）" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:13px;box-sizing:border-box;margin-bottom:12px">
+<div style="display:flex;gap:10px">
+<button id="apiKeySave" onclick="saveAPIKey()" style="flex:1;padding:10px;background:#1a4fa0;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700">保存</button>
+<button onclick="closeAPIKeyModal()" style="flex:1;padding:10px;background:#eee;border:none;border-radius:8px;cursor:pointer">取消</button>
 </div>
+<p id="apiKeyStatus" style="margin:12px 0 0 0;font-size:12px;color:#666;text-align:center"></p>
+</div>
+</div></div>
 <div class="prog-wrap" id="progWrap" style="display:none">
 <div class="prog-label"><span id="progText"></span><span id="progPct"></span></div>
 <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
@@ -605,13 +617,20 @@ state.pos=firstUnanswered(visibleIdx());
 /* ─── AI 深度解析功能 ─── */
 let currentQID = null;
 let aiMessages = [];
-const OPENAI_API_KEY = "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";
+
+function getAPIKey(){
+  return localStorage.getItem('openai_api_key');
+}
 
 function openAIChat(qid){
+  const apiKey = getAPIKey();
+  if(!apiKey){
+    alert('请先在工具栏点击⚙️ API Key 设置，输入你的 OpenAI API Key');
+    return;
+  }
   currentQID = qid;
   aiMessages = [];
   const q = QB[qid];
-  const context = `题目：${q.q}\n选项：${q.opts.join(' | ')}\n标准答案解析：${q.exp.replace(/<[^>]*>/g,'')}`;
   document.getElementById('aiModal').style.display='flex';
   document.getElementById('aiMessages').innerHTML='<div style="padding:8px;background:#f0f8ff;border-radius:6px;font-size:12px;color:#666">📚 系统信息已加载。请问你对这道题的哪个部分不理解？</div>';
   document.getElementById('aiInput').focus();
@@ -623,22 +642,54 @@ function closeAIChat(){
   aiMessages = [];
 }
 
+function openAPIKeyModal(){
+  const stored = getAPIKey();
+  if(stored){
+    document.getElementById('apiKeyInput').value = stored;
+    document.getElementById('apiKeyStatus').textContent = '✅ 已保存 API Key';
+  }
+  document.getElementById('apiKeyModal').style.display='flex';
+}
+
+function closeAPIKeyModal(){
+  document.getElementById('apiKeyModal').style.display='none';
+}
+
+function saveAPIKey(){
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if(!key){
+    alert('请输入 API Key');
+    return;
+  }
+  if(!key.startsWith('sk-')){
+    alert('API Key 应该以 sk- 开头');
+    return;
+  }
+  localStorage.setItem('openai_api_key', key);
+  document.getElementById('apiKeyStatus').textContent = '✅ API Key 已保存！';
+  document.getElementById('apiKeyStatus').style.color = '#16794c';
+  setTimeout(() => closeAPIKeyModal(), 1500);
+}
+
 function sendAIMessage(){
+  const apiKey = getAPIKey();
+  if(!apiKey){
+    alert('API Key 未设置');
+    return;
+  }
+  
   const input = document.getElementById('aiInput');
   const msg = input.value.trim();
   if(!msg) return;
   input.value = '';
   
   const messagesDiv = document.getElementById('aiMessages');
-  // 显示用户消息
   messagesDiv.innerHTML += '<div style="padding:8px;background:#e4eef9;border-radius:6px;margin-left:20px;font-size:12px">👤 ' + msg + '</div>';
   
-  // 禁用输入
   const btn = document.getElementById('aiSendBtn');
   btn.disabled = true;
   btn.textContent = '思考中...';
   
-  // 调用 OpenAI API
   const q = QB[currentQID];
   const systemPrompt = '你是一名数据库管理课程的讲师，用清晰、简洁的方式解释概念。';
   const userPrompt = `题目：${q.q}\n选项：${q.opts.join(' | ')}\n\n学生的问题：${msg}\n\n请用中文简明扼要地回答（不超过200字）`;
@@ -647,10 +698,10 @@ function sendAIMessage(){
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + OPENAI_API_KEY
+      'Authorization': 'Bearer ' + apiKey
     },
     body: JSON.stringify({
-      model: 'gpt-4-turbo',
+      model: 'gpt-4',
       messages: [
         {role: 'system', content: systemPrompt},
         {role: 'user', content: userPrompt}
@@ -661,7 +712,10 @@ function sendAIMessage(){
   })
   .then(r => r.json())
   .then(data => {
-    const reply = data.choices?.[0]?.message?.content || '❌ API 调用失败，请检查 key';
+    if(data.error){
+      throw new Error(data.error.message || 'API 错误');
+    }
+    const reply = data.choices?.[0]?.message?.content || '❌ 无法获取回答';
     messagesDiv.innerHTML += '<div style="padding:8px;background:#f0f5ff;border-radius:6px;margin-right:20px;font-size:12px;border-left:3px solid #1a4fa0">🤖 ' + reply + '</div>';
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
     btn.disabled = false;
@@ -679,6 +733,8 @@ document.addEventListener('keypress', e => {
     sendAIMessage();
   }
 });
+
+document.getElementById('btnAPIKey').onclick = openAPIKeyModal;
 
 render();
 </script>
