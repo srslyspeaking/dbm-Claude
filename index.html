@@ -26,6 +26,7 @@ main{max-width:1180px;margin:0 auto;padding:18px 20px 50px;display:grid;grid-tem
 .chap-btn.active{background:#e4eef9;border-color:#b8cfe8;color:var(--primary);font-weight:700}
 .badge{font-size:11px;color:#fff;background:#9bb0c8;border-radius:99px;padding:1px 7px}
 .badge.done{background:#0f6b3e}
+.badge.wrong{background:#d9534f}
 .content{display:flex;flex-direction:column;gap:14px}
 .toolbar{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 14px;display:flex;gap:9px;flex-wrap:wrap;align-items:center}
 .btn{min-height:34px;padding:6px 13px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);font:600 13.5px/1 inherit;cursor:pointer}
@@ -49,6 +50,16 @@ input[type=radio]{margin-top:3px;accent-color:var(--primary)}
 .exp{margin-top:12px;padding:12px 14px;border-radius:8px;background:#f0f5ff;border-left:4px solid var(--primary);display:none;font-size:13.5px;line-height:1.7}
 .exp.show{display:block}
 .exp-head{font-weight:700;color:var(--primary);margin-bottom:5px;font-size:12.5px;letter-spacing:.4px}
+.exp strong{font-weight:700;color:#123880}
+.exp em{font-style:italic;color:#555}
+.ai-history{margin-top:12px;border:1px solid #dce3ed;border-radius:8px;background:#f9fafb}
+.ai-history-head{padding:10px 12px;border-bottom:1px solid #dce3ed;font-weight:700;font-size:12.5px;color:var(--primary);cursor:pointer;display:flex;justify-content:space-between}
+.ai-history-head:hover{background:#f0f5ff}
+.ai-history-body{display:none;padding:10px 12px;max-height:300px;overflow-y:auto}
+.ai-history-body.show{display:block}
+.ai-qa{margin-bottom:10px;padding:8px;border-radius:6px;background:#fff;border-left:3px solid #ff9500}
+.ai-qa strong{color:var(--primary);font-size:12px}
+.ai-qa div:last-child{margin-top:4px;font-size:12px;color:#555;line-height:1.5;white-space:pre-wrap;word-break:break-word}
 .q-nav{margin-top:14px;display:flex;gap:8px}
 .q-nav .btn{flex:1;min-height:40px}
 .q-nav .btn.secondary{background:#f0f5ff;color:var(--primary);border-color:var(--primary)}
@@ -63,18 +74,24 @@ input[type=radio]{margin-top:3px;accent-color:var(--primary)}
 code{font-family:"Courier New",monospace;background:#e8edf5;padding:1px 5px;border-radius:4px;font-size:.88em}
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:999;justify-content:center;align-items:center;overflow-y:auto}
 .modal.show{display:flex}
-.modal-content{background:#fff;border-radius:10px;padding:20px;width:90%;max-width:500px;margin:20px auto;max-height:75vh;display:flex;flex-direction:column}
-.modal-content h3{margin:0 0 10px 0;font-size:14px}
-.modal-content input{width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;margin-bottom:10px;box-sizing:border-box;font-size:13px}
-.modal-btn{flex:1;padding:8px;border:none;border-radius:6px;cursor:pointer;font-weight:700}
-#aiMsg{flex:1;overflow-y:auto;padding:10px;margin:10px 0;border:1px solid #eee;border-radius:6px;font-size:12px;line-height:1.5;background:#f9fafb}
-#aiMsg div{margin:6px 0;padding:8px;border-radius:4px}
-.ai-user{background:#e4eef9;color:var(--primary)}
-.ai-bot{background:#f0f5ff;border-left:3px solid var(--primary)}
-.ai-input-wrap{display:flex;gap:8px;padding-top:10px}
+.modal-content{background:#fff;border-radius:10px;padding:0;width:90%;max-width:540px;margin:20px auto;max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid #dce3ed;background:#f9fafb}
+.modal-head h3{margin:0;font-size:14px}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted)}
+.modal-body{flex:1;overflow-y:auto;padding:16px}
+.modal-body input{width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;margin-bottom:10px;box-sizing:border-box;font-size:13px}
+#aiMsg{margin-bottom:10px}
+#aiMsg div{margin:8px 0;padding:10px;border-radius:6px}
+.ai-user{background:#e4eef9;color:var(--primary);font-weight:500;white-space:pre-wrap;word-break:break-word}
+.ai-bot{background:#f0f5ff;border-left:3px solid var(--primary);white-space:pre-wrap;word-break:break-word;line-height:1.6}
+.ai-bot strong{font-weight:700;color:#123880}
+.ai-bot em{font-style:italic;color:#555}
+.ai-input-wrap{display:flex;gap:8px;padding-top:10px;border-top:1px solid #dce3ed}
 #aiInput{flex:1}
-#aiBtn{padding:8px 12px;flex:0 0 auto}
-@media(max-width:560px){h1{font-size:18px}.sidebar{display:none}main{padding:8px 10px 32px;grid-template-columns:1fr}.toolbar{padding:8px 10px;gap:6px}.toolbar .btn{flex:0 1 auto;padding:8px 10px;min-height:36px;font-size:12px}.qblock{padding:12px}.qtxt{font-size:14.5px;margin-bottom:10px}.opts{gap:6px}label.opt{padding:8px 10px;min-height:38px;grid-template-columns:18px 1fr;gap:5px;font-size:12.5px}.exp{font-size:12px;padding:10px}.q-nav{gap:6px;margin-top:10px}.q-nav .btn{min-height:36px;font-size:12px;padding:6px 8px}}
+#aiBtn{padding:8px 12px;flex:0 0 auto;background:var(--primary);border-color:var(--primary);color:#fff}
+#aiBtn:hover{background:#123880}
+#aiBtn:disabled{background:#ccc;cursor:not-allowed}
+@media(max-width:560px){h1{font-size:18px}.sidebar{display:none}main{padding:8px 10px 32px;grid-template-columns:1fr}.toolbar{padding:8px 10px;gap:6px}.toolbar .btn{flex:0 1 auto;padding:8px 10px;min-height:36px;font-size:12px}.qblock{padding:12px}.qtxt{font-size:14.5px;margin-bottom:10px}.opts{gap:6px}label.opt{padding:8px 10px;min-height:38px;grid-template-columns:18px 1fr;gap:5px;font-size:12.5px}.exp{font-size:12px;padding:10px}.ai-history-body{max-height:250px}.q-nav{gap:6px;margin-top:10px}.q-nav .btn{min-height:36px;font-size:12px;padding:6px 8px}.modal-content{width:95%;max-width:100%}}
 </style>
 </head>
 <body>
@@ -88,6 +105,10 @@ code{font-family:"Courier New",monospace;background:#e8edf5;padding:1px 5px;bord
 <div class="stat-row"><span>题目</span><strong id="statTotal">0</strong></div>
 <div class="stat-row"><span>已答</span><strong id="statDone">0</strong></div>
 <div class="stat-row"><span>答对</span><strong id="statRight" style="color:#0f6b3e">0</strong></div>
+<div class="stat-row"><span>错题</span><strong id="statWrong" style="color:#d9534f">0</strong></div>
+</div></div>
+<div class="card"><div class="card-head">练习模式</div><div style="padding:7px">
+<button class="btn secondary" style="width:100%;margin-bottom:6px;background:#f0f5ff;color:var(--primary);border-color:var(--primary);text-align:left" id="btnWrongOnly" onclick="wrongOnly()">❌ 错题集</button>
 </div></div>
 <div class="card"><div class="card-head">章节</div><div class="chap-list" id="chapList"></div></div>
 </div>
@@ -113,23 +134,33 @@ code{font-family:"Courier New",monospace;background:#e8edf5;padding:1px 5px;bord
 
 <div id="keyModal" class="modal">
 <div class="modal-content" style="max-width:450px">
+<div class="modal-head">
 <h3>🔑 OpenAI API Key</h3>
+<button class="modal-close" onclick="closeKeyModal()">✕</button>
+</div>
+<div class="modal-body">
 <p style="color:#666;margin:8px 0;font-size:12px">获取：<a href="https://platform.openai.com/api-keys" target="_blank" style="color:#1a4fa0">platform.openai.com</a></p>
 <input id="keyInput" type="password" placeholder="sk-proj-...">
 <div style="display:flex;gap:10px">
-<button class="modal-btn" style="background:#1a4fa0;color:#fff" onclick="saveKey()">保存</button>
-<button class="modal-btn" style="background:#eee" onclick="closeKeyModal()">取消</button>
+<button class="btn primary" style="flex:1" onclick="saveKey()">保存</button>
+<button class="btn" style="flex:1" onclick="closeKeyModal()">取消</button>
+</div>
 </div>
 </div>
 </div>
 
 <div id="aiModal" class="modal">
 <div class="modal-content">
+<div class="modal-head">
 <h3>🤖 AI 深度解析</h3>
+<button class="modal-close" onclick="closeAI()">✕</button>
+</div>
+<div class="modal-body">
 <div id="aiMsg"></div>
 <div class="ai-input-wrap">
 <input id="aiInput" type="text" placeholder="输入问题...">
-<button id="aiBtn" class="modal-btn" style="background:#1a4fa0;color:#fff" onclick="askAI()">发送</button>
+<button id="aiBtn" class="btn" onclick="askAI()">发送</button>
+</div>
 </div>
 </div>
 </div>
@@ -139,58 +170,74 @@ const QB = [{"ch": "L1", "label": "第1章 · 数据库基础概念", "src": "�
 const LABELS = {"L1":"第1章","L2":"第2章","L3":"第3章","L4":"第4章","L5":"第5章","L6":"第6章","L7":"第7章","L8DW":"第17章","L8API":"第15章","L9":"第18-20章","L10":"第14章"};
 const ORDER = ["L1","L2","L3","L4","L5","L6","L7","L8DW","L8API","L9","L10"];
 const SKEY = "dbm_v3";
+const AIKEY = "ai_records";
 
 let store = JSON.parse(localStorage.getItem(SKEY)) || {ans:{}};
+let aiRecords = JSON.parse(localStorage.getItem(AIKEY)) || {};
 let state = {mode:"chapter",ch:ORDER[0],pos:0,qids:[],aid:null};
 
-function fmt(t){return (t||"").replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>');}
+function fmt(t){
+  if(!t)return "";
+  return (t||"")
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/__(.+?)__/g,'<em>$1</em>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\n/g,'<br>');
+}
 function saveStore(){localStorage.setItem(SKEY,JSON.stringify(store));}
-function visibleIdx(){if(state.mode==="quiz")return state.qids;if(state.mode==="random")return state.rids;return QB.filter(q=>q.ch===state.ch).map((_,i)=>QB.indexOf(QB.find(q=>q.ch===state.ch)));}
+function saveAI(){localStorage.setItem(AIKEY,JSON.stringify(aiRecords));}
+function visibleIdx(){
+  if(state.mode==="quiz")return state.qids;
+  if(state.mode==="random")return state.rids;
+  if(state.mode==="wrong")return state.wids;
+  return QB.filter(q=>q.ch===state.ch).map((_,i)=>QB.indexOf(QB.find(q=>q.ch===state.ch)));
+}
 function firstUnanswered(ids){for(let i=0;i<ids.length;i++)if(!store.ans[ids[i]])return i;return 0;}
 
 function render(){
   const ids=visibleIdx(),n=state.pos;state.pos=Math.min(n,ids.length-1);
   const id=ids[state.pos],q=QB[id],chosen=store.ans[id];
-  document.getElementById("qContainer").innerHTML=`<div class="qblock">
-<div class="qmeta"><span class="tag">${q.label}</span><span style="margin-left:auto">${state.pos+1}/${ids.length}</span></div>
-<div class="qtxt">${fmt(q.q)}</div>
-<div class="opts">${q.opts.map((o,i)=>{
-  let cls="opt";if(chosen!==undefined){if(i===q.ans)cls+=" correct";else if(i===chosen)cls+=" wrong";}
-  const ck=chosen===i?"checked":"",dis=chosen!==undefined?"disabled":"";
-  return `<label class="${cls}"><input type="radio" name="q${id}" ${ck} ${dis} onchange="pick(${id},${i})"><span>${String.fromCharCode(65+i)}. ${fmt(o)}</span></label>`;
-}).join("")}</div>
-${chosen!==undefined?`<div class="exp show"><div class="exp-head">✅ 解析</div>${q.exp}</div>`:""}<div class="q-nav">
-<button class="btn secondary" ${state.pos===0?"disabled":""} onclick="prevQ()">← 上一题</button>
-<button class="btn secondary" onclick="openAI(${id})" style="background:#ff9500;color:#fff;border-color:#ff9500">🤖 问AI</button>
-<button class="btn secondary" ${state.pos===ids.length-1?"disabled":""} onclick="nextQ()">下一题 →</button>
-</div></div>`; 
+  let qhtml=`<div class="qblock"><div class="qmeta"><span class="tag">${q.label}</span><span style="margin-left:auto">${state.pos+1}/${ids.length}</span></div><div class="qtxt">${fmt(q.q)}</div><div class="opts">${q.opts.map((o,i)=>{
+    let cls="opt";if(chosen!==undefined){if(i===q.ans)cls+=" correct";else if(i===chosen)cls+=" wrong";}
+    const ck=chosen===i?"checked":"",dis=chosen!==undefined?"disabled":"";
+    return `<label class="${cls}"><input type="radio" name="q${id}" ${ck} ${dis} onchange="pick(${id},${i})"><span>${String.fromCharCode(65+i)}. ${fmt(o)}</span></label>`;
+  }).join("")}</div>`;
+  if(chosen!==undefined)qhtml+=`<div class="exp show"><div class="exp-head">✅ 解析</div>${fmt(q.exp)}</div>`;
+  if(aiRecords[id]&&aiRecords[id].length>0){
+    qhtml+=`<div class="ai-history"><div class="ai-history-head" onclick="this.nextElementSibling.classList.toggle('show')">📚 AI 解析记录 (${aiRecords[id].length}) <span>▼</span></div><div class="ai-history-body">`;
+    aiRecords[id].forEach(r=>{qhtml+=`<div class="ai-qa"><strong>Q: ${r.q}</strong><div>${fmt(r.a)}</div></div>`});
+    qhtml+=`</div></div>`;
+  }
+  qhtml+=`<div class="q-nav"><button class="btn secondary" ${state.pos===0?"disabled":""} onclick="prevQ()">← 上一题</button><button class="btn secondary" onclick="openAI(${id})" style="background:#ff9500;color:#fff;border-color:#ff9500">🤖 问AI</button><button class="btn secondary" ${state.pos===ids.length-1?"disabled":""} onclick="nextQ()">下一题 →</button></div></div>`;
+  document.getElementById("qContainer").innerHTML=qhtml;
   updateStats();updateChapList();updateProgress();
 }
 
 function pick(id,i){store.ans[id]=i;saveStore();render();}
 function nextQ(){const ids=visibleIdx();if(state.pos<ids.length-1){state.pos++;render();window.scrollTo(0,0);}}
 function prevQ(){if(state.pos>0){state.pos--;render();window.scrollTo(0,0);}}
-function openAI(id){if(!localStorage.getItem("key")){alert("请先在工具栏设置 API Key");return;}state.aid=id;const q=QB[id];document.getElementById("aiMsg").innerHTML=`<div class="ai-bot">💭 根据题目为你生成解析中...</div>`;document.getElementById("aiModal").classList.add("show");initAI(q);}
+function wrongOnly(){state.mode="wrong";const w=[];QB.forEach((q,i)=>{if(store.ans[i]!==undefined&&store.ans[i]!==q.ans)w.push(i);});if(w.length===0){alert("还没有错题呢");return;}state.wids=w;state.pos=0;render();window.scrollTo(0,0);}
+function openAI(id){if(!localStorage.getItem("key")){alert("请先在工具栏设置 API Key");return;}state.aid=id;const q=QB[id];document.getElementById("aiMsg").innerHTML=`<div class="ai-bot">💭 正在生成深度解析...</div>`;document.getElementById("aiModal").classList.add("show");initAI(q);}
 function closeAI(){document.getElementById("aiModal").classList.remove("show");}
 function closeKeyModal(){document.getElementById("keyModal").classList.remove("show");}
 function saveKey(){const k=document.getElementById("keyInput").value.trim();if(k){localStorage.setItem("key",k);closeKeyModal();alert("✅ API Key 已保存")}}
-function initAI(q){const k=localStorage.getItem("key");if(!k)return;const msg=`题目：${q.q}\n选项：${q.opts.map((o,i)=>`${String.fromCharCode(65+i)}. ${o}`).join("\n")}\n标准答案：${String.fromCharCode(65+q.ans)}\n答案解析：${q.exp.replace(/<[^>]*>/g,'')}\n\n用最简单通俗的方式（像给小学生讲一样），解释这个概念。不要用复杂术语，多举身边的例子。`;
+function initAI(q){const k=localStorage.getItem("key");if(!k)return;const opts=q.opts.map((o,i)=>String.fromCharCode(65+i)+". "+o).join("\n");const msg=`题目：${q.q}\n选项：${opts}\n标准答案：${String.fromCharCode(65+q.ans)}. ${q.opts[q.ans]}\n答案解析：${q.exp.replace(/<[^>]*>/g,'')}\n\n请用以下结构回答：\n【关键概念】简述核心术语（用粗体标记记忆钩子）\n【专业解释】详细的学术角度讲解（可用专业术语）\n【简单理解】用生活比喻让不懂的人听懂`;
   const div=document.getElementById("aiMsg");
-  fetch("https://api.openai.com/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+k},body:JSON.stringify({model:"gpt-4o",messages:[{role:"system",content:"你是一个耐心的数据库讲师。用最简单、最通俗的语言解释概念。完全不要用复杂术语，要让不懂的人也能听懂。多举生活中的例子。"},{role:"user",content:msg}],max_tokens:500,temperature:0.7})}
-  ).then(r=>r.json()).then(d=>{const reply=d.choices?.[0]?.message?.content||"❌ 出错了";div.innerHTML+=`<div class="ai-bot">${reply}</div>`;div.scrollTop=div.scrollHeight;document.getElementById("aiInput").focus();}).catch(e=>{div.innerHTML+=`<div class="ai-bot" style="color:#b01f1f">❌ 错误：${e.message}</div>`;console.error(e);});
+  fetch("https://api.openai.com/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+k},body:JSON.stringify({model:"gpt-4o",messages:[{role:"system",content:"你是一个深谙数据库理论的讲师。回答时要有学术深度，按【关键概念】【专业解释】【简单理解】的三层次结构。"},{role:"user",content:msg}],max_tokens:1000,temperature:0.7})})
+  .then(r=>r.json()).then(d=>{const reply=d.choices?.[0]?.message?.content||"❌ 出错了";div.innerHTML=`<div class="ai-bot">${fmt(reply)}</div>`;div.scrollTop=div.scrollHeight;document.getElementById("aiInput").focus();}).catch(e=>{div.innerHTML+=`<div class="ai-bot" style="color:#b01f1f">❌ 错误：${e.message}</div>`;});
 }
 function askAI(){const k=localStorage.getItem("key"),msg=document.getElementById("aiInput").value.trim();if(!msg||!k)return;
   const q=QB[state.aid];document.getElementById("aiInput").value="";const div=document.getElementById("aiMsg");
   div.innerHTML+=`<div class="ai-user">👤 ${msg}</div>`;const btn=document.getElementById("aiBtn");btn.disabled=true;btn.innerHTML="...";
-  fetch("https://api.openai.com/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+k},body:JSON.stringify({model:"gpt-4o",messages:[{role:"system",content:"你是一个耐心的数据库讲师。用最简单、最通俗的语言解释概念。完全不要用复杂术语，要让不懂的人也能听懂。多举生活中的例子。"},{role:"user",content:`题目：${q.q}\n答案：${String.fromCharCode(65+q.ans)}. ${q.opts[q.ans]}\n用户问：${msg}\n用简单通俗的语言回答，像给不懂的人讲一样。`}],max_tokens:400,temperature:0.7})}
-  ).then(r=>r.json()).then(d=>{const reply=d.choices?.[0]?.message?.content||"❌ 错误";div.innerHTML+=`<div class="ai-bot">${reply}</div>`;div.scrollTop=div.scrollHeight;btn.disabled=false;btn.innerHTML="发送";}).catch(e=>{div.innerHTML+=`<div class="ai-bot" style="color:#b01f1f">❌ ${e.message}</div>`;btn.disabled=false;btn.innerHTML="发送";});
+  fetch("https://api.openai.com/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+k},body:JSON.stringify({model:"gpt-4o",messages:[{role:"system",content:"你是一个深谙数据库理论的讲师。用【关键词】【详细解释】【比喻】的三段式回答。"},{role:"user",content:`题目：${q.q}\n答案：${String.fromCharCode(65+q.ans)}. ${q.opts[q.ans]}\n用户追问：${msg}\n\n请用【关键词】(1-3个记忆钩子)【详细解释】(学术角度)【比喻】(生活比喻)三段式回答。`}],max_tokens:800,temperature:0.7})})
+  .then(r=>r.json()).then(d=>{const reply=d.choices?.[0]?.message?.content||"❌ 错误";div.innerHTML+=`<div class="ai-bot">${fmt(reply)}</div>`;if(!aiRecords[state.aid])aiRecords[state.aid]=[];aiRecords[state.aid].push({q:msg,a:reply});saveAI();div.scrollTop=div.scrollHeight;btn.disabled=false;btn.innerHTML="发送";}).catch(e=>{div.innerHTML+=`<div class="ai-bot" style="color:#b01f1f">❌ ${e.message}</div>`;btn.disabled=false;btn.innerHTML="发送";});
 }
 
-function updateStats(){let d=0,r=0;QB.forEach((q,i)=>{if(store.ans[i]){d++;if(store.ans[i]===q.ans)r++;}});document.getElementById("statTotal").textContent=QB.length;document.getElementById("statDone").textContent=d;document.getElementById("statRight").textContent=r;}
+function updateStats(){let d=0,r=0,w=0;QB.forEach((q,i)=>{if(store.ans[i]){d++;if(store.ans[i]===q.ans)r++;else w++;}});document.getElementById("statTotal").textContent=QB.length;document.getElementById("statDone").textContent=d;document.getElementById("statRight").textContent=r;document.getElementById("statWrong").textContent=w;}
 
-function updateChapList(){const l=document.getElementById("chapList");l.innerHTML="";ORDER.forEach(ch=>{const ids=QB.filter(q=>q.ch===ch).map((_,i)=>QB.indexOf(QB.find(q=>q.ch===ch)));const d=ids.filter(i=>store.ans[i]).length;const b=document.createElement("button");b.className="chap-btn"+(state.mode==="chapter"&&state.ch===ch?" active":"");b.innerHTML=`<span>${LABELS[ch]}</span><span class="badge${d===ids.length?" done":""}">${d}/${ids.length}</span>`;b.onclick=()=>{state.mode="chapter";state.ch=ch;state.pos=firstUnanswered(QB.filter(q=>q.ch===ch).map((_,i)=>QB.indexOf(QB.find(q=>q.ch===ch))));render();window.scrollTo(0,0);};l.appendChild(b);});};
+function updateChapList(){const l=document.getElementById("chapList");l.innerHTML="";ORDER.forEach(ch=>{const ids=QB.filter(q=>q.ch===ch).map((_,i)=>QB.indexOf(QB.find(q=>q.ch===ch)));const d=ids.filter(i=>store.ans[i]).length;let wrongCnt=0;ids.forEach(i=>{if(store.ans[i]!==undefined&&store.ans[i]!==QB[i].ans)wrongCnt++;});const b=document.createElement("button");b.className="chap-btn"+(state.mode==="chapter"&&state.ch===ch?" active":"");b.innerHTML=`<span>${LABELS[ch]}</span><span class="badge${d===ids.length?" done":wrongCnt?" wrong":""}">${d}/${ids.length}${wrongCnt?` (${wrongCnt})`:""}</span>`;b.onclick=()=>{state.mode="chapter";state.ch=ch;state.pos=firstUnanswered(QB.filter(q=>q.ch===ch).map((_,i)=>QB.indexOf(QB.find(q=>q.ch===ch))));render();window.scrollTo(0,0);};l.appendChild(b);});}
 
-function updateProgress(){const ids=visibleIdx(),d=ids.filter(i=>store.ans[i]).length,p=Math.round(d/ids.length*100);document.getElementById("progFill").style.width=p+"%";if(state.mode==="quiz"){document.getElementById("sectionBar").style.display="none";document.getElementById("progText").textContent="模拟考试 "+d+"/"+ids.length;}else if(state.mode==="random"){document.getElementById("sectionBar").style.display="block";document.getElementById("secTitle").textContent="🔀 随机练习";document.getElementById("progText").textContent="随机 "+d+"/"+ids.length;}else{document.getElementById("sectionBar").style.display="block";document.getElementById("secTitle").textContent=LABELS[state.ch];const orig=QB.filter(q=>q.ch===state.ch&&!q.new).length;document.getElementById("secHint").textContent=ids.length+"题";document.getElementById("progText").textContent=d+"/"+ids.length;}document.getElementById("progWrap").style.display="block";document.getElementById("progPct").textContent=p+"%";}
+function updateProgress(){const ids=visibleIdx(),d=ids.filter(i=>store.ans[i]).length,p=Math.round(d/ids.length*100);document.getElementById("progFill").style.width=p+"%";if(state.mode==="quiz"){document.getElementById("sectionBar").style.display="none";document.getElementById("progText").textContent="模拟考试 "+d+"/"+ids.length;}else if(state.mode==="wrong"){document.getElementById("sectionBar").style.display="block";document.getElementById("secTitle").textContent="❌ 错题集";document.getElementById("secHint").textContent=ids.length+"道错题";document.getElementById("progText").textContent=d+"/"+ids.length;}else if(state.mode==="random"){document.getElementById("sectionBar").style.display="block";document.getElementById("secTitle").textContent="🔀 随机练习";document.getElementById("progText").textContent=d+"/"+ids.length;}else{document.getElementById("sectionBar").style.display="block";document.getElementById("secTitle").textContent=LABELS[state.ch];document.getElementById("secHint").textContent=ids.length+"题";document.getElementById("progText").textContent=d+"/"+ids.length;}document.getElementById("progWrap").style.display="block";document.getElementById("progPct").textContent=p+"%";}
 
 function newQuiz(){state.mode="quiz";state.qids=QB.map((_,i)=>i).sort(()=>Math.random()-0.5).slice(0,30);state.pos=0;state.qids.forEach(i=>delete store.ans[i]);saveStore();document.getElementById("resultBox").classList.remove("show");render();window.scrollTo(0,0);}
 
